@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{% if mode == 'register' %}Crea un account{% else %}Accedi{% endif %} — Parolario</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body><div class="shell auth-shell">
+  <header><a class="brand brand-link" href="{{ url_for('login') }}">parola<span>rio</span> ✳</a><div class="badge">🌱 &nbsp; Una parola alla volta</div></header>
+  <main class="auth-card">
+    <div class="eyebrow">La palestra delle parole</div>
+    <h1>{% if mode == 'register' %}Crea il tuo account{% else %}Bentornato{% endif %}</h1>
+    <p>{% if mode == 'register' %}Salveremo le tue partite e i tuoi progressi.{% else %}Accedi per continuare ad allenare il tuo vocabolario.{% endif %}</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-list">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+    <form method="post" class="form-stack" autocomplete="on">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label for="username">Username</label><input id="username" name="username" type="text" autocomplete="username" {% if mode == 'register' %}minlength="3" maxlength="30"{% endif %} required autofocus>
+      {% if mode == 'register' %}<p class="form-hint">Da 3 a 30 caratteri: lettere, numeri, punti, trattini o trattini bassi.</p><label for="email">Indirizzo email</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" required>{% endif %}
+      <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="{% if mode == 'register' %}new-password{% else %}current-password{% endif %}" required>
+      {% if mode == 'register' %}<label for="password_confirmation">Ripeti la password</label><input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" required>{% endif %}
+      <button class="primary" type="submit">{% if mode == 'register' %}Crea account{% else %}Accedi{% endif %}</button>
+    </form>
+    <p class="auth-switch">{% if mode == 'register' %}Hai già un account? <a href="{{ url_for('login') }}">Accedi</a>{% else %}Non hai un account? <a href="{{ url_for('register') }}">Registrati</a>{% endif %}</p>
+  </main>
+</div></body></html>

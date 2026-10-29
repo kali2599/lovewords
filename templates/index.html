@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ef">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>Parolario — allena il tuo vocabolario</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+  <div class="shell">
+    <header><div class="brand">parola<span>rio</span> ✳</div><nav class="account-nav"><span class="badge">Ciao, {{ current_user['username'] or current_user['email'] }}</span><a class="nav-link" href="{{ url_for('progress') }}">I miei progressi</a>{% if current_user['role'] == 'admin' %}<a class="nav-link" href="{{ url_for('admin_users') }}">Amministrazione</a>{% endif %}<form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="nav-link nav-button" type="submit">Esci</button></form></nav></header>
+    <section class="stats-strip" aria-label="I tuoi progressi"><div><strong>{{ summary['games'] }}</strong><span>partite giocate</span></div><div><strong>{{ summary['correct'] }}/{{ summary['questions'] }}</strong><span>risposte corrette</span></div><a href="{{ url_for('progress') }}">Consulta lo storico →</a></section>
+    <main>
+      <section class="hero"><div><div class="eyebrow">La palestra delle parole</div><h1>Allena il tuo <span style="color:var(--green)">vocabolario.</span></h1><p>Scopri parole nuove, ragiona sui loro significati e usale nei giochi. Tutto in italiano, al tuo ritmo.</p></div><div class="hero-art" aria-hidden="true"><div class="bubble one">🌻 &nbsp; meraviglia</div><div class="bubble two">parole in fiore</div><div class="bubble three">curiosità + gioco</div><div class="sun">☀️</div></div></section>
+      <section class="levelbar" aria-label="Scegli il livello"><strong>Il tuo livello</strong><button class="level" data-level="facile" aria-pressed="true">Facile</button><button class="level" data-level="medio" aria-pressed="false">Medio</button><button class="level" data-level="difficile" aria-pressed="false">Difficile</button><span class="level-description" id="levelDescription">Parole comuni e indizi diretti</span></section>
+      <div class="section-title"><h2>Scegli un gioco</h2><span>Quattro modi per imparare</span></div>
+      <section class="games" aria-label="Giochi di parole">
+        <article class="game"><div class="game-top"><div class="icon">🧩</div><span class="tag">Parole &amp; frasi</span></div><h3>Componi la frase</h3><p>Riordina le tessere e usa la parola proposta in una frase sensata.</p><button class="launch" data-game="phrase">Gioca <span aria-hidden="true">→</span></button></article>
+        <article class="game"><div class="game-top"><div class="icon">🔎</div><span class="tag">Indizi &amp; lettere</span></div><h3>Cruciverba lampo</h3><p>Leggi la definizione e indovina la parola nascosta.</p><button class="launch" data-game="clue">Risolvi <span aria-hidden="true">→</span></button></article>
+        <article class="game"><div class="game-top"><div class="icon">🔗</div><span class="tag">Significati vicini</span></div><h3>Trova il sinonimo</h3><p>Scegli la parola che ha un significato simile a quella proposta.</p><button class="launch" data-game="synonym">Gioca <span aria-hidden="true">→</span></button></article>
+        <article class="game"><div class="game-top"><div class="icon">✍️</div><span class="tag">Ortografia &amp; indizi</span></div><h3>Completa la parola</h3><p>Ricostruisci una parola usando la definizione e le lettere disponibili.</p><button class="launch" data-game="complete">Comincia <span aria-hidden="true">→</span></button></article>
+      </section>
+      <div class="how"><span><strong>Sessioni brevi.</strong> Impara nuove parole giocando, senza traduzioni.</span><span>Ogni parola apre un mondo ✨</span></div>
+    </main>
+  </div>
+  <div class="overlay" id="overlay" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div><div class="eyebrow" id="roundLabel">Facile · Turno 1 di 3</div><h2 id="modalTitle">Componi la frase</h2></div><button class="close" aria-label="Chiudi il gioco">×</button></div><div class="progress"><i id="progressBar" style="width:33%"></i></div><div id="gameContent"></div></section></div>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>
